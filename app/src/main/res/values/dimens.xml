@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="AutocompleteTextSize_NormalSize">30dp</dimen>
+    <dimen name="PersianTextview_NormalSize">30dp</dimen>
+    <dimen name="MenuOptionTextSize_NormalSize">20dp</dimen>
+    <dimen name="PersianFlagHeight_NormalSize">50dp</dimen>
+    <dimen name="PersianFlagWidth_NormalSize">25dp</dimen>
+    <dimen name="EnglandFlagHeight_NormalSize">40dp</dimen>
+    <dimen name="EnglandFlagWidth_NormalSize">20dp</dimen>
+    <dimen name="ManueItemHeight_NormalSize">50dp</dimen>
+</resources>
