@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_ENTER) {
-                    if(App.dbHelper.translateToPersian(actvMainPage.getText().toString().toLowerCase())!=null){
+                    if(actvMainPage.getText().toString()!=null){
                         if(App.sharedPreferences.getInt("translate_mode",0)==0){
                             translateToPersian();
                             //tvMean.setText(App.dbHelper.translateToPersian(actvMainPage.getText().toString().toLowerCase()));
