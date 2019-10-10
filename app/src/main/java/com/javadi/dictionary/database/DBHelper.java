@@ -95,10 +95,14 @@ public class DBHelper extends SQLiteOpenHelper {
         String mean=null;
         if(cursor.moveToFirst()){
             do{
-                mean=cursor.getString(1)+"،"+mean;
+                mean=cursor.getString(1)+"،\n"+mean;
             }while (cursor.moveToNext());
         }
-        return mean.substring(0,mean.length()-5);
+        else{
+            return "";
+        }
+
+        return mean.substring(0,mean.length()-6);
     }
 
     public String translateToEnglish(String word){

@@ -24,7 +24,6 @@ public class Favorite extends AppCompatActivity {
     RecyclerView recyFavorite;
     List<String> words=new ArrayList<>();
     FavoriteAdapter favoriteAdapter;
-    ImageView imgMenuFavoritePage;
     DrawerLayout drawerFavorite;
     ConstraintLayout clMainPage,clExit,clHistory,clFavorite;
     public static Toolbar toolbarFavorite;
@@ -41,7 +40,6 @@ public class Favorite extends AppCompatActivity {
         clExit=(ConstraintLayout)findViewById(R.id.menu_exit);
         drawerFavorite=(DrawerLayout)findViewById(R.id.drawer_favorite);
         toolbarFavorite=(Toolbar)findViewById(R.id.toobar_favorite_page);
-        imgMenuFavoritePage=(ImageView)findViewById(R.id.img_menu_favorite_page);
 
         LinearLayoutManager llm=new LinearLayoutManager(Favorite.this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
@@ -49,21 +47,24 @@ public class Favorite extends AppCompatActivity {
 
         setSupportActionBar(toolbarFavorite);
 
+        // add back arrow to toolbar
+        if (getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            //getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+
+        toolbarFavorite.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
         words= App.dbHelper.getFavoriteList();
         favoriteAdapter=new FavoriteAdapter(this,words);
         recyFavorite.setAdapter(favoriteAdapter);
 
-        imgMenuFavoritePage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(drawerFavorite.isDrawerOpen(Gravity.RIGHT)){
-                    drawerFavorite.closeDrawer(Gravity.RIGHT);
-                }
-                else{
-                    drawerFavorite.openDrawer(Gravity.RIGHT);
-                }
-            }
-        });
+
         clMainPage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

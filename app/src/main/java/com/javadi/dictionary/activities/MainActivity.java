@@ -24,6 +24,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.javadi.dictionary.utils.App;
 import com.javadi.dictionary.R;
+
+import java.io.DataOutput;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -42,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
     ConstraintLayout clExitMenu,clHistoryMenu,clFavorite,clMainMenu,clContact,clSettings;
     TextView tvMean;
     TextToSpeech t1;
+    static ArrayAdapter arrayAdapterEnglish;
+    static ArrayAdapter arrayAdapterPersian;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        appSettings();
+        //appSettings();
 
 
         //set toolbar
@@ -108,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_ENTER) {
-                    if(actvMainPage.getText().toString()!=null){
+                    if(actvMainPage.getText().toString().length()>0){
                         if(App.sharedPreferences.getInt("translate_mode",0)==0){
                             translateToPersian();
                             //tvMean.setText(App.dbHelper.translateToPersian(actvMainPage.getText().toString().toLowerCase()));
@@ -136,6 +140,18 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length()<3){
+                    if(App.sharedPreferences.getInt("translate_mode",0)==0){
+                        arrayAdapterEnglish=new ArrayAdapter(MainActivity.this,android.R.layout.simple_list_item_1, englishWords);
+                        actvMainPage.setAdapter(arrayAdapterEnglish);
+                        persianWords.clear();
+                    }
+                    else {
+                        arrayAdapterPersian=new ArrayAdapter(MainActivity.this,android.R.layout.simple_list_item_1, persianWords);
+                        actvMainPage.setAdapter(arrayAdapterPersian);
+                        englishWords.clear();
+                    }
+                }
                 tvMean.setText("");
                 imgFavorite.setImageResource(R.drawable.favorite_border);
                 imgFavorite.setTag("false");
@@ -275,6 +291,22 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        actvMainPage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                /*if(App.sharedPreferences.getInt("translate_mode",0)==0){
+                    ArrayAdapter arrayAdapter=new ArrayAdapter(MainActivity.this,android.R.layout.simple_list_item_1, englishWords);
+                    actvMainPage.setAdapter(arrayAdapter);
+                    persianWords.clear();
+                }
+                else {
+                    ArrayAdapter arrayAdapter=new ArrayAdapter(MainActivity.this,android.R.layout.simple_list_item_1, persianWords);
+                    actvMainPage.setAdapter(arrayAdapter);
+                    englishWords.clear();
+                }*/
+            }
+        });
     }
 
 
@@ -335,6 +367,12 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         actvMainPage.dismissDropDown();
         appSettings();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                loadWords();
+            }
+        }).start();
     }
 
     private void appSettings(){
@@ -346,13 +384,13 @@ public class MainActivity extends AppCompatActivity {
             actvMainPage.setText("");
             actvMainPage.setHint("English");
             tvMean.setText("فارسی");
-            if(englishWords.size()==0){
+            /*if(englishWords.size()==0){
                 englishWords = App.dbHelper.englishWordList();
                 //set array adapter for autocompletetextview
                 ArrayAdapter arrayAdapter=new ArrayAdapter(MainActivity.this,android.R.layout.simple_list_item_1, englishWords);
                 actvMainPage.setAdapter(arrayAdapter);
                 persianWords.clear();
-            }
+            }*/
         }
         else if(translate_mode==1){
             imgLeftFlag.setImageResource(R.drawable.iran);
@@ -360,18 +398,35 @@ public class MainActivity extends AppCompatActivity {
             actvMainPage.setText("");
             actvMainPage.setHint("فارسی");
             tvMean.setText("English");
+        }
+    }
+
+    private void loadWords(){
+
+        int translate_mode=App.sharedPreferences.getInt("translate_mode",0);
+        if(translate_mode==0){
+            if(englishWords.size()==0){
+                englishWords = App.dbHelper.englishWordList();
+                persianWords.clear();
+            }
+        }
+        else if(translate_mode==1){
             if(persianWords.size()==0){
                 persianWords = App.dbHelper.persianWordList();
-                //set array adapter for autocompletetextview
-                ArrayAdapter arrayAdapter=new ArrayAdapter(MainActivity.this,android.R.layout.simple_list_item_1, persianWords);
-                actvMainPage.setAdapter(arrayAdapter);
                 englishWords.clear();
             }
         }
     }
 
     private void translateToPersian(){
-        tvMean.setText(App.dbHelper.translateToPersian(actvMainPage.getText().toString().toLowerCase()));
+        String mean=App.dbHelper.translateToPersian(actvMainPage.getText().toString().toLowerCase());
+        if(mean.equals("")){
+            Toast.makeText(MainActivity.this,"لغتی یافت نشد",Toast.LENGTH_LONG).show();
+        }
+        else{
+            tvMean.setText(mean);
+        }
+
         hideKeyboard();
         checkHistoryContainer();
         if(checkfavoriteContainer()==true){

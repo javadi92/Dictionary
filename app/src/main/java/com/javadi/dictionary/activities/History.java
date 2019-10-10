@@ -25,7 +25,6 @@ public class History extends AppCompatActivity {
     RecyclerView recyclerViewHistory;
     HistoryAdapter historyAdapter;
     List<String> words=new ArrayList<>();
-    ImageView imgMenuHistoryPage;
     DrawerLayout drawerLayoutHistory;
     ConstraintLayout clMainPage,clExit,clFavorite,clHistory;
     public static Toolbar toolbarHistory;
@@ -35,7 +34,6 @@ public class History extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
 
-        imgMenuHistoryPage=(ImageView)findViewById(R.id.img_menu_history_page);
         toolbarHistory=(Toolbar)findViewById(R.id.toobar_history);
         clMainPage=(ConstraintLayout)findViewById(R.id.menu_main_page);
         clFavorite=(ConstraintLayout)findViewById(R.id.menu_favorite);
@@ -52,17 +50,20 @@ public class History extends AppCompatActivity {
 
         setSupportActionBar(toolbarHistory);
 
-        imgMenuHistoryPage.setOnClickListener(new View.OnClickListener() {
+        // add back arrow to toolbar
+        if (getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            //getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+
+        toolbarHistory.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                if(drawerLayoutHistory.isDrawerOpen(Gravity.RIGHT)){
-                    drawerLayoutHistory.closeDrawer(Gravity.RIGHT);
-                }
-                else {
-                    drawerLayoutHistory.openDrawer(Gravity.RIGHT);
-                }
+            public void onClick(View view) {
+                finish();
             }
         });
+
+
         clMainPage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
