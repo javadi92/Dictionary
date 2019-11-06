@@ -1,6 +1,5 @@
-package com.javadi.dictionary.activities;
+package com.javadi92.dictionary.activities;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.speech.tts.TextToSpeech;
 import android.support.constraint.ConstraintLayout;
@@ -22,15 +21,13 @@ import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.javadi.dictionary.utils.App;
-import com.javadi.dictionary.R;
-
-import java.io.DataOutput;
+import com.javadi92.dictionary.utils.App;
+import com.javadi92.dictionary.R;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
 
     List<String> englishWords =new ArrayList<>();
@@ -40,9 +37,9 @@ public class MainActivity extends AppCompatActivity {
     Toolbar toolbar;
     ImageView imgPronounce,imgMenu,imgFavorite,imgLeftFlag,imgRightFlag;
     DrawerLayout drawerLayout;
-    AutoCompleteTextView actvMainPage;
+    static AutoCompleteTextView actvMainPage;
     ConstraintLayout clExitMenu,clHistoryMenu,clFavorite,clMainMenu,clContact,clSettings;
-    TextView tvMean;
+    static TextView tvMean;
     TextToSpeech t1;
     static ArrayAdapter arrayAdapterEnglish;
     static ArrayAdapter arrayAdapterPersian;
@@ -63,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         imgRightFlag=(ImageView)findViewById(R.id.img_right_flag);
         clExitMenu=(ConstraintLayout)findViewById(R.id.menu_exit);
         clFavorite=(ConstraintLayout)findViewById(R.id.menu_favorite);
-        clMainMenu=(ConstraintLayout)findViewById(R.id.menu_main_page);
+
         clContact=(ConstraintLayout)findViewById(R.id.menu_contact);
         clSettings=(ConstraintLayout)findViewById(R.id.menu_settings);
         tvMean =(TextView)findViewById(R.id.tv_mean);
@@ -77,13 +74,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //appSettings();
-
 
         //set toolbar
         setSupportActionBar(toolbar);
-
-
 
         //hide keyboard at startup
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
@@ -100,11 +93,9 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(App.sharedPreferences.getInt("translate_mode",0)==0){
                     translateToPersian();
-                    //tvMean.setText(App.dbHelper.translateToPersian(actvMainPage.getText().toString().toLowerCase()));
                 }
                 else{
                     translateToEnglish();
-                    //tvMean.setText(App.dbHelper.translateToEnglish(actvMainPage.getText().toString()));
                 }
             }
         });
@@ -115,11 +106,9 @@ public class MainActivity extends AppCompatActivity {
                     if(actvMainPage.getText().toString().length()>0){
                         if(App.sharedPreferences.getInt("translate_mode",0)==0){
                             translateToPersian();
-                            //tvMean.setText(App.dbHelper.translateToPersian(actvMainPage.getText().toString().toLowerCase()));
                         }
                         else{
                             translateToEnglish();
-                            //tvMean.setText(App.dbHelper.translateToEnglish(actvMainPage.getText().toString()));
                         }
                     }
                     else{
@@ -178,139 +167,6 @@ public class MainActivity extends AppCompatActivity {
         imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
     }
 
-    private void clickManager(){
-        imgMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(drawerLayout.isDrawerOpen(Gravity.RIGHT)){
-                    drawerLayout.closeDrawer(Gravity.RIGHT);
-                }
-                else{
-                    drawerLayout.openDrawer(Gravity.RIGHT);
-                }
-            }
-        });
-
-        clExitMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
-        clMainMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(drawerLayout.isDrawerOpen(Gravity.RIGHT)){
-                    drawerLayout.closeDrawer(Gravity.RIGHT);
-                }
-            }
-        });
-
-        clHistoryMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent historyIntent=new Intent(MainActivity.this, History.class);
-                startActivity(historyIntent);
-                if(drawerLayout.isDrawerOpen(Gravity.RIGHT)){
-                    drawerLayout.closeDrawer(Gravity.RIGHT);
-                }
-            }
-        });
-
-        clFavorite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent favoriteIntent=new Intent(MainActivity.this, Favorite.class);
-                startActivity(favoriteIntent);
-                if(drawerLayout.isDrawerOpen(Gravity.RIGHT)){
-                    drawerLayout.closeDrawer(Gravity.RIGHT);
-                }
-            }
-        });
-
-        clContact.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AlertDialog dialog;
-                AlertDialog.Builder builder=new AlertDialog.Builder(MainActivity.this);
-                builder.setTitle("راه ارتباطی");
-                builder.setMessage("javadimehr01@gmail.com");
-                builder.setPositiveButton("خب", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-
-                    }
-                });
-                dialog=builder.create();
-
-                //dialog.getButton(Dialog.BUTTON_POSITIVE).setTextSize(20); // set text size of positive button
-                //dialog.getButton(Dialog.BUTTON_POSITIVE).setTextColor(Color.BLUE); //set text color of positive button
-
-                dialog.getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL); // set title and message direction to RTL
-                dialog.show();
-            }
-        });
-
-        clSettings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent settingsIntent=new Intent(MainActivity.this,SettingsActivity.class);
-                startActivity(settingsIntent);
-                if(drawerLayout.isOpaque()){
-                    drawerLayout.closeDrawer(Gravity.RIGHT);
-                }
-            }
-        });
-
-        imgPronounce.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(App.sharedPreferences.getInt("translate_mode",0)==0){
-                    if(actvMainPage.getText().toString().trim()!=""){
-                        t1.speak(actvMainPage.getText().toString(), TextToSpeech.QUEUE_FLUSH, null);
-                    }
-                }
-                else{
-                    if(actvMainPage.getText().toString().trim()!=""){
-                        t1.speak(tvMean.getText().toString(), TextToSpeech.QUEUE_FLUSH, null);
-                    }
-                }
-
-            }
-        });
-
-        imgFavorite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(!tvMean.getText().toString().equals("") && !actvMainPage.getText().toString().equals("")){
-                    AddToHistory();
-                }
-                else {
-                    Toast.makeText(MainActivity.this,"لغتی یافت نشد",Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-        actvMainPage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                /*if(App.sharedPreferences.getInt("translate_mode",0)==0){
-                    ArrayAdapter arrayAdapter=new ArrayAdapter(MainActivity.this,android.R.layout.simple_list_item_1, englishWords);
-                    actvMainPage.setAdapter(arrayAdapter);
-                    persianWords.clear();
-                }
-                else {
-                    ArrayAdapter arrayAdapter=new ArrayAdapter(MainActivity.this,android.R.layout.simple_list_item_1, persianWords);
-                    actvMainPage.setAdapter(arrayAdapter);
-                    englishWords.clear();
-                }*/
-            }
-        });
-    }
-
-
-
     private void checkHistoryContainer(){
         if(App.sharedPreferences.getInt("translate_mode",0)==0){
             historyWords=App.dbHelper.getHistoryList();
@@ -366,7 +222,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         actvMainPage.dismissDropDown();
-        appSettings();
+        if(actvMainPage.getText().toString().length()==0){
+            //Toast.makeText(MainActivity.this,"",Toast.LENGTH_LONG).show();
+            appSettings();
+        }
+        else {
+            flagImageSet();
+        }
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -384,13 +246,6 @@ public class MainActivity extends AppCompatActivity {
             actvMainPage.setText("");
             actvMainPage.setHint("English");
             tvMean.setText("فارسی");
-            /*if(englishWords.size()==0){
-                englishWords = App.dbHelper.englishWordList();
-                //set array adapter for autocompletetextview
-                ArrayAdapter arrayAdapter=new ArrayAdapter(MainActivity.this,android.R.layout.simple_list_item_1, englishWords);
-                actvMainPage.setAdapter(arrayAdapter);
-                persianWords.clear();
-            }*/
         }
         else if(translate_mode==1){
             imgLeftFlag.setImageResource(R.drawable.iran);
@@ -398,6 +253,19 @@ public class MainActivity extends AppCompatActivity {
             actvMainPage.setText("");
             actvMainPage.setHint("فارسی");
             tvMean.setText("English");
+        }
+    }
+
+    private void flagImageSet(){
+
+        int translate_mode=App.sharedPreferences.getInt("translate_mode",0);
+        if(translate_mode==0){
+            imgLeftFlag.setImageResource(R.drawable.england);
+            imgRightFlag.setImageResource(R.drawable.iran);
+        }
+        else if(translate_mode==1){
+            imgLeftFlag.setImageResource(R.drawable.iran);
+            imgRightFlag.setImageResource(R.drawable.england);
         }
     }
 
@@ -486,5 +354,99 @@ public class MainActivity extends AppCompatActivity {
                 imgFavorite.setTag("false");
             }
         }
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case (R.id.img_menu_history_page):
+                if(drawerLayout.isDrawerOpen(Gravity.RIGHT)){
+                    drawerLayout.closeDrawer(Gravity.RIGHT);
+                }
+                else{
+                    drawerLayout.openDrawer(Gravity.RIGHT);
+                }
+                break;
+            case (R.id.menu_exit):
+                finish();
+                break;
+
+            case (R.id.menu_history):
+                Intent historyIntent=new Intent(MainActivity.this, History.class);
+                startActivity(historyIntent);
+                if(drawerLayout.isDrawerOpen(Gravity.RIGHT)){
+                    drawerLayout.closeDrawer(Gravity.RIGHT);
+                }
+                break;
+            case (R.id.menu_favorite):
+                Intent favoriteIntent=new Intent(MainActivity.this, Favorite.class);
+                startActivity(favoriteIntent);
+                if(drawerLayout.isDrawerOpen(Gravity.RIGHT)){
+                    drawerLayout.closeDrawer(Gravity.RIGHT);
+                }
+                break;
+            case (R.id.menu_contact):
+                AlertDialog dialog;
+                AlertDialog.Builder builder=new AlertDialog.Builder(MainActivity.this);
+                builder.setTitle("راه ارتباطی");
+                builder.setMessage("javadimehr01@gmail.com");
+                /*builder.setPositiveButton("خب", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });*/
+                dialog=builder.create();
+                //dialog.getButton(Dialog.BUTTON_POSITIVE).setTextSize(TypedValue.COMPLEX_UNIT_SP, 25.0f);
+
+                dialog.getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL); // set title and message direction to RTL
+                dialog.show();
+                break;
+            case (R.id.menu_settings):
+                Intent settingsIntent=new Intent(MainActivity.this,SettingsActivity.class);
+                startActivity(settingsIntent);
+                if(drawerLayout.isOpaque()){
+                    drawerLayout.closeDrawer(Gravity.RIGHT);
+                }
+                break;
+            case (R.id.img_pronounce_history_page):
+                if(App.sharedPreferences.getInt("translate_mode",0)==0){
+                    if(actvMainPage.getText().toString().trim()!=""){
+                        t1.speak(actvMainPage.getText().toString(), TextToSpeech.QUEUE_FLUSH, null);
+                    }
+                }
+                else{
+                    if(actvMainPage.getText().toString().trim()!=""){
+                        t1.speak(tvMean.getText().toString(), TextToSpeech.QUEUE_FLUSH, null);
+                    }
+                }
+                break;
+            case (R.id.img_favorite):
+                if(!tvMean.getText().toString().equals("") && !actvMainPage.getText().toString().equals("")){
+                    AddToHistory();
+                }
+                else {
+                    Toast.makeText(MainActivity.this,"لغتی یافت نشد",Toast.LENGTH_SHORT).show();
+                }
+                break;
+        }
+    }
+
+    private void clickManager(){
+        imgMenu.setOnClickListener(this);
+
+        clExitMenu.setOnClickListener(this);
+
+        clHistoryMenu.setOnClickListener(this);
+
+        clFavorite.setOnClickListener(this);
+
+        clContact.setOnClickListener(this);
+
+        clSettings.setOnClickListener(this);
+
+        imgPronounce.setOnClickListener(this);
+
+        imgFavorite.setOnClickListener(this);
     }
 }

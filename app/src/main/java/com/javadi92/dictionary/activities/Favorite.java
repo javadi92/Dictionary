@@ -1,4 +1,4 @@
-package com.javadi.dictionary.activities;
+package com.javadi92.dictionary.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,11 +11,10 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.ImageView;
 
-import com.javadi.dictionary.utils.App;
-import com.javadi.dictionary.R;
-import com.javadi.dictionary.adapter.FavoriteAdapter;
+import com.javadi92.dictionary.utils.App;
+import com.javadi92.dictionary.R;
+import com.javadi92.dictionary.adapter.FavoriteAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +24,7 @@ public class Favorite extends AppCompatActivity {
     List<String> words=new ArrayList<>();
     FavoriteAdapter favoriteAdapter;
     DrawerLayout drawerFavorite;
-    ConstraintLayout clMainPage,clExit,clHistory,clFavorite;
+    ConstraintLayout clExit,clHistory,clFavorite;
     public static Toolbar toolbarFavorite;
 
     @Override
@@ -34,7 +33,7 @@ public class Favorite extends AppCompatActivity {
         setContentView(R.layout.activity_favorite );
 
         recyFavorite=(RecyclerView)findViewById(R.id.recy_favorite);
-        clMainPage=(ConstraintLayout)findViewById(R.id.menu_main_page);
+
         clHistory=(ConstraintLayout)findViewById(R.id.menu_history);
         clFavorite=(ConstraintLayout)findViewById(R.id.menu_favorite);
         clExit=(ConstraintLayout)findViewById(R.id.menu_exit);
@@ -64,17 +63,6 @@ public class Favorite extends AppCompatActivity {
         favoriteAdapter=new FavoriteAdapter(this,words);
         recyFavorite.setAdapter(favoriteAdapter);
 
-
-        clMainPage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intentMain=new Intent(Favorite.this, MainActivity.class);
-                startActivity(intentMain);
-                /*if(drawerFavorite.isDrawerOpen(Gravity.RIGHT)){
-                    drawerFavorite.closeDrawer(Gravity.RIGHT);
-                }*/
-            }
-        });
         clFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

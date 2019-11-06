@@ -1,4 +1,4 @@
-package com.javadi.dictionary;
+package com.javadi92.dictionary;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

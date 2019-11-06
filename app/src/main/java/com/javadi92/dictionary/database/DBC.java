@@ -1,4 +1,4 @@
-package com.javadi.dictionary.database;
+package com.javadi92.dictionary.database;
 
 public class DBC {
 

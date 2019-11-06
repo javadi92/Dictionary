@@ -1,4 +1,4 @@
-package com.javadi.dictionary.activities;
+package com.javadi92.dictionary.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,12 +11,10 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.HorizontalScrollView;
-import android.widget.ImageView;
 
-import com.javadi.dictionary.utils.App;
-import com.javadi.dictionary.R;
-import com.javadi.dictionary.adapter.HistoryAdapter;
+import com.javadi92.dictionary.utils.App;
+import com.javadi92.dictionary.R;
+import com.javadi92.dictionary.adapter.HistoryAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +24,7 @@ public class History extends AppCompatActivity {
     HistoryAdapter historyAdapter;
     List<String> words=new ArrayList<>();
     DrawerLayout drawerLayoutHistory;
-    ConstraintLayout clMainPage,clExit,clFavorite,clHistory;
+    ConstraintLayout clExit,clFavorite,clHistory;
     public static Toolbar toolbarHistory;
 
     @Override
@@ -35,7 +33,6 @@ public class History extends AppCompatActivity {
         setContentView(R.layout.activity_history);
 
         toolbarHistory=(Toolbar)findViewById(R.id.toobar_history);
-        clMainPage=(ConstraintLayout)findViewById(R.id.menu_main_page);
         clFavorite=(ConstraintLayout)findViewById(R.id.menu_favorite);
         clHistory=(ConstraintLayout)findViewById(R.id.menu_history);
         clExit=(ConstraintLayout) findViewById(R.id.menu_exit);
@@ -64,12 +61,6 @@ public class History extends AppCompatActivity {
         });
 
 
-        clMainPage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
         clHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -1,4 +1,4 @@
-package com.javadi.dictionary;
+package com.javadi92.dictionary;
 
 import org.junit.Test;
 

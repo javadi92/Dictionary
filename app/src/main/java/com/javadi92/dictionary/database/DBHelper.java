@@ -1,4 +1,4 @@
-package com.javadi.dictionary.database;
+package com.javadi92.dictionary.database;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -101,7 +101,7 @@ public class DBHelper extends SQLiteOpenHelper {
         else{
             return "";
         }
-
+        cursor.close();
         return mean.substring(0,mean.length()-6);
     }
 
@@ -115,6 +115,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 mean=cursor.getString(0);
             }while (cursor.moveToNext());
         }
+        cursor.close();
         return mean;
     }
 
@@ -131,6 +132,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 temp=cursor.getString(cursor.getColumnIndex(DBC.mainDB.ENGLISH_WORD));
             }while (cursor.moveToNext());
         }
+        cursor.close();
         return list;
     }
 
@@ -147,6 +149,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 temp=cursor.getString(cursor.getColumnIndex(DBC.mainDB.PERSIAN_WORD));
             }while (cursor.moveToNext());
         }
+        cursor.close();
         return list;
     }
 
@@ -177,6 +180,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 list.add(cursor.getString(cursor.getColumnIndex(DBC.searchedWords.ENGLISH_WORD)));
             }while (cursor.moveToNext());
         }
+        cursor.close();
         return list;
     }
 
@@ -190,6 +194,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 list.add(cursor.getString(cursor.getColumnIndex(DBC.searchedWords.ENGLISH_WORD)));
             }while (cursor.moveToNext());
         }
+        cursor.close();
         return list;
     }
 

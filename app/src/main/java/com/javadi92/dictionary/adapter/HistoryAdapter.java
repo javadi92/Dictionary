@@ -1,9 +1,10 @@
-package com.javadi.dictionary.adapter;
+package com.javadi92.dictionary.adapter;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,9 +15,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.javadi.dictionary.utils.App;
-import com.javadi.dictionary.activities.History;
-import com.javadi.dictionary.R;
+import com.javadi92.dictionary.utils.App;
+import com.javadi92.dictionary.activities.History;
+import com.javadi92.dictionary.R;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -47,7 +48,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.myViewHo
     @NonNull
     @Override
     public myViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view= LayoutInflater.from(mContext).inflate(R.layout.history_view_holder,viewGroup,false);
+        View view= LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.history_view_holder,viewGroup,false);
         return new myViewHolder(view);
     }
 
@@ -92,6 +93,30 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.myViewHo
         myViewHolder.tvEnglishHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String wordSelected=myViewHolder.tvEnglishHistory.getText().toString();
+                if(multiSelect){
+                    if(selectedItems.contains(wordSelected)){
+                        selectedItems.remove(wordSelected);
+                        myViewHolder.itemView.setBackgroundResource(R.drawable.effect);
+                    }
+                    else {
+                        selectedItems.add(wordSelected);
+                        myViewHolder.itemView.setBackgroundResource(R.drawable.effetq);
+                    }
+                }
+                else {
+                    AlertDialog dialog;
+                    AlertDialog.Builder builder=new AlertDialog.Builder(mContext);
+                    builder.setMessage(App.dbHelper.translateToPersian(myViewHolder.tvEnglishHistory.getText().toString() ));
+                    dialog=builder.create();
+                    dialog.show();
+                }
+            }
+        });
+
+        myViewHolder.clHistoryCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 String wordSelected=myViewHolder.tvEnglishHistory.getText().toString();
                 if(multiSelect){
                     if(selectedItems.contains(wordSelected)){
@@ -171,12 +196,14 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.myViewHo
 
         TextView tvEnglishHistory,tvRow;
         ImageView imgPronunceHistory;
+        ConstraintLayout clHistoryCard;
 
         public myViewHolder(@NonNull View itemView) {
             super(itemView);
             tvEnglishHistory=(TextView)itemView.findViewById(R.id.tv_english_history);
             tvRow=(TextView)itemView.findViewById(R.id.tv_row_favorite);
             imgPronunceHistory=(ImageView)itemView.findViewById(R.id.img_pronunce_history);
+            clHistoryCard =(ConstraintLayout)itemView.findViewById(R.id.cl_history_card);
         }
     }
 

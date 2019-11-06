@@ -1,9 +1,10 @@
-package com.javadi.dictionary.adapter;
+package com.javadi92.dictionary.adapter;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,9 +14,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.javadi.dictionary.utils.App;
-import com.javadi.dictionary.activities.Favorite;
-import com.javadi.dictionary.R;
+import com.javadi92.dictionary.utils.App;
+import com.javadi92.dictionary.activities.Favorite;
+import com.javadi92.dictionary.R;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -109,6 +110,30 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.myView
                 }
             }
         });
+
+        myViewHolder.clFavoriteCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(multiSelected){
+                    String temp=myViewHolder.tvEnglishFavorite.getText().toString();
+                    if(wordSelected.contains(temp)){
+                        wordSelected.remove(temp);
+                        myViewHolder.itemView.setBackgroundResource(R.drawable.effect);
+                    }
+                    else {
+                        wordSelected.add(temp);
+                        myViewHolder.itemView.setBackgroundResource(R.drawable.effetq);
+                    }
+                }
+                else {
+                    AlertDialog dialog;
+                    AlertDialog.Builder builder=new AlertDialog.Builder(mContext);
+                    builder.setMessage(App.dbHelper.translateToPersian(myViewHolder.tvEnglishFavorite.getText().toString() ));
+                    dialog=builder.create();
+                    dialog.show();
+                }
+            }
+        });
         myViewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -164,12 +189,14 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.myView
 
         TextView tvEnglishFavorite,tvRow;
         ImageView imgPronunceFavorite;
+        ConstraintLayout clFavoriteCard;
 
         public myViewHolder(@NonNull View itemView) {
             super(itemView);
             tvEnglishFavorite=(TextView)itemView.findViewById(R.id.tv_english_favorite);
             tvRow=(TextView)itemView.findViewById(R.id.tv_row_favorite);
             imgPronunceFavorite=(ImageView)itemView.findViewById(R.id.img_pronunce_favorite);
+            clFavoriteCard=(ConstraintLayout)itemView.findViewById(R.id.cl_favorite_card);
         }
     }
 

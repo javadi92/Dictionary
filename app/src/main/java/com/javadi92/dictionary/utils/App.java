@@ -1,9 +1,9 @@
-package com.javadi.dictionary.utils;
+package com.javadi92.dictionary.utils;
 
 import android.app.Application;
 import android.content.SharedPreferences;
 
-import com.javadi.dictionary.database.DBHelper;
+import com.javadi92.dictionary.database.DBHelper;
 
 public class App extends Application {
 
